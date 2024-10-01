@@ -10439,6 +10439,7 @@ MonoBehaviour:
   jetpackForce: 8
   normalFallSpeed: 0.05
   speedModifier: 1
+  cameraMovement: {fileID: 519420033}
 --- !u!1 &1645127989
 GameObject:
   m_ObjectHideFlags: 0

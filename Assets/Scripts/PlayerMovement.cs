@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public float speedModifier = 1f; 
     private Rigidbody2D rb;
     private bool usingJetpack;
+    public CameraMovement cameraMovement;
 
     void Start()
     {
@@ -77,7 +78,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("WinTrigger"))
         {
-            Win(); // Call the Win method when player touches finish line area
+            Win();
+            cameraMovement.StopCamera();
+            sceneRotation.StopRotation();
         }
     }
 

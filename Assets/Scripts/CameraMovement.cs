@@ -6,6 +6,7 @@ public class CameraMovement : MonoBehaviour
 {
     public SceneRotation sceneRotation;
     public float speed = 2.0f;
+    private bool stopMovement = false;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +18,7 @@ public class CameraMovement : MonoBehaviour
     void Update()
     {
         //stop the camera movement when the scene rotating.
-        if (!sceneRotation.isRotating){
+        if (!sceneRotation.isRotating && !stopMovement){
             if(sceneRotation.isVertical){
                 transform.position += Vector3.down * speed * Time.deltaTime;
             }
@@ -25,5 +26,10 @@ public class CameraMovement : MonoBehaviour
                 transform.position += Vector3.right * speed * Time.deltaTime;
             }
         }
+    }
+
+    public void StopCamera()
+    {
+        stopMovement = true;
     }
 }

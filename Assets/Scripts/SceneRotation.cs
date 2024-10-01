@@ -10,6 +10,7 @@ public class SceneRotation : MonoBehaviour
     public float rotationPeriod = 5.0f;
     private float nextRotateTime = 0.0f;
     private float rotationProgress;
+    private bool shouldRotate = true;
     
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,9 @@ public class SceneRotation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // check if player reach finish line
+        if (!shouldRotate) return;
+
         // https://stackoverflow.com/questions/42658013/slowly-rotating-towards-angle-in-unity reference rotation
 
         float currentTime = Time.time;
@@ -56,5 +60,11 @@ public class SceneRotation : MonoBehaviour
                 isRotating = false;
             }
         }
+    }
+
+    
+    public void StopRotation()
+    {
+        shouldRotate = false;
     }
 }
