@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public SceneRotation sceneRotation;
     public float speed = 5f;
-    public float jumpForce = 10f;
-    public float jetpackForce = 8f;
-    public LayerMask groundLayer; // Set this to the tiles layer
-    public Transform groundCheck;
-    public float groundCheckRadius = 0.2f;
-
+    public float jumpForceLandscape = 10f; 
+    public float fallSpeedLandscape = 0.02f; 
+    public float jetpackForce = 8f; 
+    public float normalFallSpeed = 0.05f; 
+    public float speedModifier = 1f; 
     private Rigidbody2D rb;
-    private bool isGrounded;
     private bool usingJetpack;
 
     void Start()
@@ -23,60 +22,60 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // Move Left/Right
-        float moveInput = Input.GetAxis("Horizontal"); // "Horizontal" maps to Left and Right arrows or A/D keys
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        float moveInput = Input.GetAxis("Horizontal");
+        rb.velocity = new Vector2(moveInput * speed * speedModifier, rb.velocity.y);
 
-        // Check if the player is on the ground (using ground check for jump)
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-
-        // Jump if space is pressed and player is on the ground
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        // Check the scene orientation 
+        if (!sceneRotation.isVertical)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-        }
+            // Enable jumping and disable jetpack
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForceLandscape); 
+            }
 
-        // Jetpack usage
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            usingJetpack = true;
-            rb.velocity = new Vector2(rb.velocity.x, jetpackForce);
+            // Slow falling in landscape mode
+            if (rb.velocity.y < 0)
+            {
+                rb.velocity += new Vector2(0, -fallSpeedLandscape);
+            }
+
+            usingJetpack = false; 
         }
         else
         {
-            usingJetpack = false;
-        }
+            // Enable jetpack and disable jumping
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                usingJetpack = true;
+                rb.velocity = new Vector2(rb.velocity.x, jetpackForce);
+            }
+            else
+            {
+                usingJetpack = false;
+            }
 
-        // Handle falling mechanics
-        if (!usingJetpack && !isGrounded)
-        {
-            rb.velocity += new Vector2(0, -0.05f); // Simulating falling downward
+            // Use normal falling speed in vertical mode
+            if (!usingJetpack && rb.velocity.y < 0)
+            {
+                rb.velocity += new Vector2(0, -normalFallSpeed); // Normal falling speed
+            }
         }
     }
-
 
     // Handle Collision with Spike
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Spike"))
         {
-            Die(); // Call the Die method if player touches a spike
+            Die(); // Call the Die method if the player touches a spike
         }
     }
 
     // Death method
     void Die()
     {
-        // You can choose what happens here. For now, we'll just reload the scene
         Debug.Log("Player has died!");
-
-        // Reload the current scene
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-    }
-
-    // Debugging: Drawing ground check radius
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     }
 }
