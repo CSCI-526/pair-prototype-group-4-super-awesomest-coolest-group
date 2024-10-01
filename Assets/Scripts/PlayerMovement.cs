@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     public float fallSpeedLandscape = 0.02f; 
     public float jetpackForce = 8f; 
     public float normalFallSpeed = 0.05f; 
-    public float speedModifier = 1f; 
     private Rigidbody2D rb;
     private bool usingJetpack;
     public CameraMovement cameraMovement;
@@ -24,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // Move Left/Right
         float moveInput = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(moveInput * speed * speedModifier, rb.velocity.y);
+        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
 
         // Check the scene orientation 
         if (!sceneRotation.isVertical)
@@ -46,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             // Enable jetpack and disable jumping
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.Space))
             {
                 usingJetpack = true;
                 rb.velocity = new Vector2(rb.velocity.x, jetpackForce);
