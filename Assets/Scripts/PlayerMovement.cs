@@ -72,10 +72,25 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Trigger detection for the Finish Line
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("WinTrigger"))
+        {
+            Win(); // Call the Win method when player touches finish line area
+        }
+    }
+
     // Death method
     void Die()
     {
         Debug.Log("Player has died!");
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
+
+    // Win method
+    void Win()
+    {
+        Debug.Log("You win!");
     }
 }
