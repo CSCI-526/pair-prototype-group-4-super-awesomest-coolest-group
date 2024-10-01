@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ⁠ https://www.youtube.com/watch?v=mldjoVDhKc4 ⁠ Reference
+/// </summary>
 public class PlayerMovement : MonoBehaviour
 {
     public SceneRotation sceneRotation;
@@ -11,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     public float jetpackForce = 8f; 
     public float normalFallSpeed = 0.05f; 
     private Rigidbody2D rb;
-    private bool usingJetpack;
+    private bool useJet;
     public CameraMovement cameraMovement;
 
     void Start()
@@ -21,61 +24,58 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Move Left/Right
-        float moveInput = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        float moveLR = Input.GetAxis("Horizontal"); // Left/Righ Movement
+        Vector2 vel= new Vector2(moveLR * speed, rb.velocity.y);
+        rb.velocity = vel;
 
-        // Check the scene orientation 
-        if (!sceneRotation.isVertical)
+        if (sceneRotation.isVertical) //Check vert
         {
-            // Enable jumping and disable jetpack
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space)) // disable jump, enable jet
             {
-                rb.velocity = new Vector2(rb.velocity.x, jumpForceLandscape); 
-            }
-
-            // Slow falling in landscape mode
-            if (rb.velocity.y < 0)
-            {
-                rb.velocity += new Vector2(0, -fallSpeedLandscape);
-            }
-
-            usingJetpack = false; 
-        }
-        else
-        {
-            // Enable jetpack and disable jumping
-            if (Input.GetKey(KeyCode.Space))
-            {
-                usingJetpack = true;
+                useJet = true;
                 rb.velocity = new Vector2(rb.velocity.x, jetpackForce);
             }
             else
             {
-                usingJetpack = false;
+                useJet = false;
             }
 
-            // Use normal falling speed in vertical mode
-            if (!usingJetpack && rb.velocity.y < 0)
+            if (!useJet && rb.velocity.y < 0) // Use normal gravity in vertical mode
             {
                 rb.velocity += new Vector2(0, -normalFallSpeed); // Normal falling speed
             }
         }
-    }
-
-    // Handle Collision with Spike
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Spike"))
+        else
         {
-            Die(); // Call the Die method if the player touches a spike
+            if (Input.GetKeyDown(KeyCode.Space)) // input spaceBar
+            {
+                Vector2 spac = new Vector2(rb.velocity.x, jumpForceLandscape);
+                rb.velocity = spac;
+            }
+
+            if (rb.velocity.y < 0) // Slow landscape fall
+            {
+                Vector2 slo = new Vector2(0, -fallSpeedLandscape);
+                rb.velocity += slo;
+            }
+
+            useJet = false;
         }
     }
 
-    // Trigger detection for the Finish Line
+    
+    void OnCollisionEnter2D(Collision2D collision) // If collided with spike
+    {
+        if (collision.gameObject.CompareTag("Spike")) //check if it is spike
+        {
+            Die();
+        }
+    }
+
+    
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("WinTrigger"))
+        if (collision.gameObject.CompareTag("WinTrigger")) // If it is winTrigger
         {
             Win();
             cameraMovement.StopCamera();
@@ -83,16 +83,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // Death method
     void Die()
     {
-        Debug.Log("Player has died!");
+        Debug.Log("Player has died :("); //print death
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 
-    // Win method
     void Win()
     {
-        Debug.Log("You win!");
+        Debug.Log("Winner Winner Chicken Dinner!"); //print win
     }
 }
