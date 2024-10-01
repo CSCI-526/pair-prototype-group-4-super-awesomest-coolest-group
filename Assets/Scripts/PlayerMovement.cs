@@ -8,11 +8,11 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public SceneRotation sceneRotation;
-    public float speed = 5f;
-    public float jumpForceLandscape = 10f; 
-    public float fallSpeedLandscape = 0.02f; 
-    public float jetpackForce = 8f; 
-    public float normalFallSpeed = 0.05f; 
+    private float speed = 5f;
+    private float jumpForceLandscape = 6.0f; 
+    private float fallSpeedLandscape = 0.09f; 
+    private float jetpackForce = 3.0f; 
+    private float normalFallSpeed = 0.05f; 
     private Rigidbody2D rb;
     private bool useJet;
     public CameraMovement cameraMovement;
