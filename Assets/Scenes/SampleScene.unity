@@ -6713,7 +6713,7 @@ RectTransform:
   m_GameObject: {fileID: 844423250}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 15}
-  m_LocalScale: {x: 50, y: 1, z: 1}
+  m_LocalScale: {x: 50, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 519420032}
@@ -8262,7 +8262,7 @@ RectTransform:
   m_GameObject: {fileID: 1113499647}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 15}
-  m_LocalScale: {x: 50, y: 1, z: 1}
+  m_LocalScale: {x: 50, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 519420032}
@@ -11222,11 +11222,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneRotation: {fileID: 291149386}
-  speed: 5
-  jumpForceLandscape: 6
-  fallSpeedLandscape: 0.09
-  jetpackForce: 3
-  normalFallSpeed: 0.05
   cameraMovement: {fileID: 519420033}
 --- !u!1 &1679314627
 GameObject:
